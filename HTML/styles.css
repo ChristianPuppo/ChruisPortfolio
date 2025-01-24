@@ -72,7 +72,7 @@ body {
     width: 100%;
     max-width: 42rem;
     padding: 0 2rem;
-    margin-top: 2rem;
+    margin-top: 0.5rem;
     position: relative;
 }
 
@@ -214,9 +214,14 @@ body {
     }
 
     .profile-container {
-        flex-direction: column;
+        flex-direction: row;
         text-align: left;
         gap: 0.5rem;
+    }
+
+    .profile-image {
+        width: 3rem;
+        height: 3rem;
     }
 
     .profile-info {
@@ -228,9 +233,11 @@ body {
     }
 
     .bio {
-        text-align: left;
-        font-size: 0.9rem;
-        margin: 1rem 0;
+        margin-bottom: 0.5rem;
+    }
+
+    .projects-section {
+        margin-top: 0.5rem;
     }
 
     .projects-grid {
