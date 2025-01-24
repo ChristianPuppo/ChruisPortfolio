@@ -179,6 +179,16 @@ body {
     background-color: #9ca3af;
 }
 
+.project-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.project-link:hover {
+    text-decoration: none;
+}
+
 @media (max-width: 768px) {
     .projects-grid {
         grid-template-columns: 1fr;
