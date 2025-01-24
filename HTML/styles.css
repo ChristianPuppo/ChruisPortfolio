@@ -215,12 +215,12 @@ body {
 
     .profile-container {
         flex-direction: column;
-        text-align: center;
+        text-align: left;
         gap: 0.5rem;
     }
 
     .profile-info {
-        text-align: center;
+        text-align: left;
     }
 
     .profile-info h1 {
@@ -228,7 +228,7 @@ body {
     }
 
     .bio {
-        text-align: center;
+        text-align: left;
         font-size: 0.9rem;
         margin: 1rem 0;
     }
@@ -256,11 +256,12 @@ body {
 
     .projects-header h2 {
         font-size: 1.25rem;
-        text-align: center;
+        text-align: left;
+        margin-bottom: 0.125rem;
     }
 
     .projects-description {
-        text-align: center;
+        text-align: left;
         font-size: 0.9rem;
     }
 }
