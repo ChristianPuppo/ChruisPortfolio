@@ -65,14 +65,14 @@ body {
 .bio {
     color: #d1d5db;
     max-width: 100%;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0px;
 }
 
 .projects-section {
     width: 100%;
     max-width: 42rem;
     padding: 0 2rem;
-    margin-top: 0.25rem;
+    margin-top: 0px;
     position: relative;
 }
 
@@ -233,11 +233,11 @@ body {
     }
 
     .bio {
-        margin-bottom: 0.25rem;
+        margin-bottom: 0px;
     }
 
     .projects-section {
-        margin-top: 0.25rem;
+        margin-top: 0px;
     }
 
     .projects-grid {
