@@ -9,10 +9,10 @@ body {
     background-color: #000000;
     color: white;
     line-height: 1.6;
-    padding: 0;
+    padding: 2rem;
     min-height: 100vh;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
 }
 
@@ -22,10 +22,7 @@ body {
     width: 100%;
     max-width: 42rem;
     padding: 2rem;
-    position: absolute;
-    top: 1vh;
-    left: 50%;
-    transform: translateX(-50%);
+    position: relative;
 }
 
 .profile-container {
@@ -72,13 +69,11 @@ body {
 }
 
 .projects-section {
-    position: absolute;
-    top: 27vh;
-    left: 50%;
-    transform: translateX(-50%);
     width: 100%;
     max-width: 42rem;
     padding: 0 2rem;
+    margin-top: 2rem;
+    position: relative;
 }
 
 .projects-header {
@@ -210,7 +205,81 @@ body {
 }
 
 @media (max-width: 768px) {
+    body {
+        padding: 0.5rem;
+    }
+
+    .header, .projects-section {
+        padding: 1rem;
+    }
+
+    .profile-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+
+    .profile-info {
+        text-align: center;
+    }
+
+    .profile-info h1 {
+        font-size: 1.5rem;
+    }
+
+    .bio {
+        text-align: center;
+        font-size: 0.9rem;
+        margin: 1rem 0;
+    }
+
     .projects-grid {
         grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .project-card {
+        padding: 0.75rem;
+    }
+
+    .project-title {
+        font-size: 0.9rem;
+    }
+
+    .project-description {
+        font-size: 0.8rem;
+    }
+
+    .project-footer {
+        font-size: 0.8rem;
+    }
+
+    .projects-header h2 {
+        font-size: 1.25rem;
+        text-align: center;
+    }
+
+    .projects-description {
+        text-align: center;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-image {
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .profile-info h1 {
+        font-size: 1.25rem;
+    }
+
+    .bio {
+        font-size: 0.85rem;
+    }
+
+    .project-card {
+        padding: 0.625rem;
     }
 }
