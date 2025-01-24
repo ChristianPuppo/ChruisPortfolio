@@ -189,6 +189,26 @@ body {
     text-decoration: none;
 }
 
+.project-type {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.type-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+}
+
+.type-dot.notes {
+    background-color: #39FF14; /* Verde fluorescente per gli appunti */
+}
+
+.type-dot.project {
+    background-color: #FF0000; /* Rosso per i progetti */
+}
+
 @media (max-width: 768px) {
     .projects-grid {
         grid-template-columns: 1fr;
