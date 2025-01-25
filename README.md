@@ -29,15 +29,3 @@ Questo sito è una combinazione di **portfolio professionale** e **blocco appunt
    - Tecnologie utilizzate.
    - Link diretto al repository GitHub.  
 3. **Appunti**: Una raccolta organizzata per linguaggio o argomento con link ai file di appunti su GitHub.  
-
----
-
-## 🎯 Obiettivi Futuri
-
-- Aggiungere funzionalità interattive per esplorare progetti e appunti.  
-- Includere un blog per condividere esperienze e approfondimenti.  
-- Migliorare il design per un'interfaccia ancora più professionale.  
-
----
-
-🌟 **Grazie per la visita!** Non dimenticare di lasciare una ⭐ se ti piace il progetto.  
