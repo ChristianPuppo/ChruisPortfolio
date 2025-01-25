@@ -17,10 +17,21 @@ HEADERS = {
     'Upgrade-Insecure-Requests': '1',
 }
 
-# Creiamo una sessione persistente
+# Configurazione globale della sessione
 session = requests.Session()
-session.headers.update(HEADERS)
-session.timeout = 30  # timeout di 30 secondi
+session.headers.update({
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Accept-Language': 'it-IT,it;q=0.8,en-US;q=0.5,en;q=0.3',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Connection': 'keep-alive',
+    'Upgrade-Insecure-Requests': '1',
+    'Sec-Fetch-Dest': 'document',
+    'Sec-Fetch-Mode': 'navigate',
+    'Sec-Fetch-Site': 'none',
+    'Sec-Fetch-User': '?1',
+    'Cache-Control': 'max-age=0'
+})
 
 # Numero massimo di thread concorrenti
 MAX_WORKERS = 10
@@ -68,90 +79,45 @@ def handle_security_redirect(response, url):
 def get_anime_info(anime_id):
     url = f"https://www.animeworld.so/api/tooltip/{anime_id}"
     try:
-        print(f"Richiesta API per anime {anime_id}")
-        
-        # Headers di base
+        print(f"Richiesta per anime {anime_id}")
         headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Accept-Language': 'it-IT,it;q=0.8,en-US;q=0.5,en;q=0.3',
             'Referer': 'https://www.animeworld.so/',
             'Origin': 'https://www.animeworld.so'
         }
+        response = session.get(url, headers=headers, timeout=30)
         
-        with requests.Session() as s:
-            s.headers.update(headers)
-            
-            # Prima richiesta per ottenere il cookie
-            response = s.get(url, timeout=30)
-            if response.status_code == 202:
-                # Estrai il cookie e l'URL di redirect dallo script
-                soup = BeautifulSoup(response.text, 'html.parser')
-                script = soup.find('script')
-                if script:
-                    # Estrai il cookie
-                    cookie_match = re.search(r'document\.cookie="([^"]+)"', script.string)
-                    if cookie_match:
-                        cookie = cookie_match.group(1).split(';')[0]  # Prendi solo la parte del cookie
-                        cookie_name, cookie_value = cookie.split('=')
-                        s.cookies.set(cookie_name, cookie_value)
-                        
-                        # Estrai l'URL di redirect
-                        redirect_match = re.search(r'location\.href="([^"]+)"', script.string)
-                        if redirect_match:
-                            redirect_url = redirect_match.group(1)
-                            # Seconda richiesta con il cookie impostato
-                            response = s.get(redirect_url, timeout=30)
-            
-            print(f"Status finale: {response.status_code}")
-            print(f"Content finale: {response.text[:200]}")
-            
-            # Ora possiamo estrarre i dati
-            soup = BeautifulSoup(response.text, 'html.parser')
-            
-            # Cerca i div meta
-            metas = soup.find_all('div', class_='meta')
-            data = "N/A"
-            stato = "N/A"
-            voto = "N/A"
-            
-            for meta in metas:
-                label = meta.find('label')
-                if label:
-                    label_text = label.text.strip()
-                    span = meta.find('span')
-                    if span:
-                        if 'Data di uscita' in label_text:
-                            data = span.text.strip()
-                        elif 'Stato' in label_text:
-                            stato = span.text.strip()
-                        elif 'Voto' in label_text:
-                            voto = span.text.strip()
-            
-            desc = soup.find('p', class_='desc')
-            descrizione = desc.text.strip() if desc else "Nessuna descrizione disponibile"
-            
-            print(f"Info recuperate per anime {anime_id}:")
-            print(f"Data: {data}")
-            print(f"Stato: {stato}")
-            print(f"Voto: {voto}")
-            print(f"Descrizione: {descrizione[:50]}...")
-            
-            return {
-                "data_uscita": data,
-                "stato": stato,
-                "voto": voto,
-                "descrizione": descrizione
-            }
-            
+        if response.status_code == 200:
+            print(f"Risposta ricevuta per anime {anime_id}")
+            return parse_anime_info(response.text)
+        else:
+            print(f"Errore {response.status_code} per anime {anime_id}")
+            return None
     except Exception as e:
-        print(f"Errore nel recupero info anime {anime_id}: {e}")
-        return {
-            "data_uscita": "N/A",
-            "stato": "N/A",
-            "voto": "N/A",
-            "descrizione": "Nessuna descrizione disponibile"
-        }
+        print(f"Errore per anime {anime_id}: {str(e)}")
+        return None
+
+def parse_anime_info(html_content):
+    try:
+        soup = BeautifulSoup(html_content, 'html.parser')
+        info = {}
+        
+        # Estrazione dati più robusta
+        for meta in soup.find_all('div', class_='meta'):
+            label = meta.find('label')
+            span = meta.find('span')
+            if label and span:
+                key = label.text.strip().replace(':', '')
+                value = span.text.strip()
+                info[key] = value
+        
+        desc = soup.find('p', class_='desc')
+        if desc:
+            info['descrizione'] = desc.text.strip()
+            
+        return info
+    except Exception as e:
+        print(f"Errore nel parsing: {str(e)}")
+        return None
 
 @app.route('/')
 def home():
