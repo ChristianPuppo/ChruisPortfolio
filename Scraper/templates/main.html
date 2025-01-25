@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnimeHub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>AnimeHub</h1>
+    </header>
+
+    <main>
+        <section class="anime-section">
+            <h2>Più Popolari</h2>
+            <div class="scroll-container">
+                <button class="scroll-button left" aria-label="Scorri a sinistra">&#8592;</button>
+                <div class="anime-list" id="popolari"></div>
+                <button class="scroll-button right" aria-label="Scorri a destra">&#8594;</button>
+            </div>
+        </section>
+
+        <section class="anime-section">
+            <h2>Ultime Uscite</h2>
+            <div class="scroll-container">
+                <button class="scroll-button left" aria-label="Scorri a sinistra">&#8592;</button>
+                <div class="anime-list" id="ultime-uscite"></div>
+                <button class="scroll-button right" aria-label="Scorri a destra">&#8594;</button>
+            </div>
+        </section>
+
+        <section class="anime-section">
+            <h2>Calendario Oggi</h2>
+            <div class="scroll-container">
+                <button class="scroll-button left" aria-label="Scorri a sinistra">&#8592;</button>
+                <div class="anime-list" id="calendario"></div>
+                <button class="scroll-button right" aria-label="Scorri a destra">&#8594;</button>
+            </div>
+        </section>
+
+        <section class="anime-section">
+            <h2>Ultimi Episodi</h2>
+            <div class="scroll-container">
+                <button class="scroll-button left" aria-label="Scorri a sinistra">&#8592;</button>
+                <div class="anime-list" id="ultimi-episodi"></div>
+                <button class="scroll-button right" aria-label="Scorri a destra">&#8594;</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/scrap.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+voglio fare un sito web, per scrappare i dati da un sito web di anime e visualizzarli nel mio sito.
+usando Python e Flask.
+
+il sito web di anime è https://www.animeworld.so/
+queste sono le informazioni necessarie a svolgere il tuo compito al meglio:
+
+allora, il sito si dividerà in sezioni fatte da project cards, ogni project card avrà il poster dell'anime, con affianco il titolo, la descrizione, il rating, e altre informazioni a seconda delle sezioni.
+
+le sezioni sono:
+- Più Popolari [link pagina: https://www.animeworld.so/filter?sort=6]
+- Ultime Uscite [link pagina: https://www.animeworld.so/newest]   
+- Calendario (giornata di oggi) [link pagina: https://www.livechart.me/schedule] UTILIZZIAMO UN ALTRO SITO PER IL CALENDARIO
+- Ultimi Episodi Usciti [link pagina: https://www.animeworld.so/updated]
+
+cominciamo a analizzare l'html della pagina https://www.animeworld.so/filter?sort=6, ti darò i contenitori delle sezioni da scrappare:
+
+1. <div class="film-list" bis_skin_checked="1">, questo è il contenitore che contiene tutti gli anime più popolari, l'intera lista.
+2. <div class="item" bis_skin_checked="1">, dentro il primo div, troviamo i singoli anime, ogni anime è un div con la classe item.
+3. <div class="inner" bis_skin_checked="1">, troviamo i metadata del singolo anime tra cui:
+    - <a href="/play/one-piece-subita.qzG-LE" data-jtitle="One Piece" class="name">One Piece</a>, il titolo dell'anime, ed il href che ci porta alla pagina degli episodi.
+    - <img loading="lazy" src="https://img.animeworld.so/locandine/one-piece-egghead-arc-key-visual-v0-gxm191p8fl2c1.jpg" alt="One Piece">, l'immagine del poster dell'anime.
+    - <a href="/play/one-piece-ita.d5nahE" class="poster tooltipstered" data-tip="api/tooltip/1297">, qui troviamo una parte importante, data-tip="api/tooltip/1297">, "1297" è l'id dell'anime, che serve per estrapolare
+     rating dell'anime, data di uscita, descrizione dell'anime, e stato attuale dell'anime, esempio link "https://www.animeworld.so/api/tooltip/<ID>" sostituendo ID con l'id dell'anime ci porta a una pagina con le informazioni che ci servono, 
+     che si trovano nei contenitori:
+        - DATA DI USCITA: <div class="meta" bis_skin_checked="1">
+        <label>Data di uscita:</label>
+        <span>
+            07 Aprile 2017
+        </span>
+     </div>
+        - STATO DELL'ANIME: <div class="meta" bis_skin_checked="1">
+        <label>Stato:</label>
+        <span>Finito</span>
+      </div>
+        - RATING DELL'ANIME:
+        <div class="meta" bis_skin_checked="1">
+        <label>Voto:</label>
+        <span>7.23</span>
+        </div>
+        - DESCRIZIONE ANIME: <p class="desc">Hinako è una ragazza poco sociale, che vive in una zona rurale del Giappone. Desidera sviluppare la sua capacità&nbsp; di comunicazione, in modo da poter parlare liberamente con gli altri. Per questo decide di trasferirsi a Tokyo e di iscriversi ad un clu...</p>
+
+        ANCHE QUESTE INFO VANNO ESTRAPOLATE
+
+FINE PER QUANTO RIGUARDA I POPOLARI.
+
+ANALIZZIAMO ADESSO: https://www.animeworld.so/newest
+
+1. <div class="film-list" bis_skin_checked="1">, questo è il contenitore che contiene tutti gli anime USCITI DI RECENTE, l'intera lista.
+2. <div class="item" bis_skin_checked="1">, dentro il primo div, troviamo i singoli anime, ogni anime è un div con la classe item.
+3. <div class="inner" bis_skin_checked="1">, troviamo i metadata del singolo anime tra cui:
+    - <a href="/play/one-piece-subita.qzG-LE" data-jtitle="One Piece" class="name">One Piece</a>, il titolo dell'anime, ed il href che ci porta alla pagina degli episodi.
+    - <img loading="lazy" src="https://img.animeworld.so/locandine/one-piece-egghead-arc-key-visual-v0-gxm191p8fl2c1.jpg" alt="One Piece">, l'immagine del poster dell'anime.
+    - <a href="/play/one-piece-ita.d5nahE" class="poster tooltipstered" data-tip="api/tooltip/1297">, qui troviamo una parte importante, data-tip="api/tooltip/1297">, "1297" è l'id dell'anime, che serve per estrapolare
+     rating dell'anime, data di uscita, descrizione dell'anime, e stato attuale dell'anime, esempio link "https://www.animeworld.so/api/tooltip/<ID>" sostituendo ID con l'id dell'anime ci porta a una pagina con le informazioni che ci servono, 
+     che si trovano nei contenitori:
+        - DATA DI USCITA: <div class="meta" bis_skin_checked="1">
+        <label>Data di uscita:</label>
+        <span>
+            07 Aprile 2017
+        </span>
+     </div>
+        - STATO DELL'ANIME: <div class="meta" bis_skin_checked="1">
+        <label>Stato:</label>
+        <span>Finito</span>
+      </div>
+        - RATING DELL'ANIME:
+        <div class="meta" bis_skin_checked="1">
+        <label>Voto:</label>
+        <span>7.23</span>
+        </div>
+        - DESCRIZIONE ANIME: <p class="desc">Hinako è una ragazza poco sociale, che vive in una zona rurale del Giappone. Desidera sviluppare la sua capacità&nbsp; di comunicazione, in modo da poter parlare liberamente con gli altri. Per questo decide di trasferirsi a Tokyo e di iscriversi ad un clu...</p>
+
+        PER QUANTO RIGUARDA QUESTA SEZIONE TUTTO RIMANE COME PRIMA.
+
+ANALIZZIAMO ADESSO: https://www.livechart.me/schedule
+
+1. <div class="lc-timetable" bis_skin_checked="1">, troviamo questo contenitore che contiene vari giorni della settimana, noi vogliamo solo oggi.
+2. <div class="lc-timetable-day lc-today" data-controller="timetable-day" data-timetable-day-start="1737759600" data-timetable-day-end="1737845999" bis_skin_checked="1">, questo indica la data di oggi.
+3. <div class="lc-timetable-day__heading flex" data-timetable-day-target="heading" bis_skin_checked="1">, troviamo il contenitore che contiene la data di oggi, da inserire come titolo della sezione calendario.
+4. dentro il contenitore sopra la data si trova: <div bis_skin_checked="1"><h2 class="inline text-2xl font-medium">Sat</h2> <span class="text-xl opacity-75">Jan 25</span></div>
+5. <div class="lc-timetable-timeslot lc-timeslot-past" data-timetable-day-target="timeslot" data-controller="timeslot" data-timestamp="1737759600" bis_skin_checked="1">, dentro il contenitore lc-today troviamo una lista
+    di div di questo tipo: <div class="lc-timetable-timeslot lc-timeslot-past" data-timetable-day-target="timeslot" data-controller="timeslot" data-timestamp="1737759600" bis_skin_checked="1">, ognuno indica un ora di oggi
+    ed il rispettivo episodio dell'anime in uscita quel giorno:
+    - <div class="lc-timetable-timeslot__content" bis_skin_checked="1">, troviamo qui dentro i contenuti: 
+        1. <div class="lc-timetable-timeslot__time text-sm" bis_skin_checked="1"><span class="lc-time"><span data-timeslot-target="time">12:00 AM</span></span>, troviamo l'ora di uscita.
+        2. <div class="lc-timetable-anime-block" data-controller="schedule-anime" data-schedule-anime-id="11776".....> troviamo dentro poster, episodio e titolo.
+            1. poster: <img alt="CARDFIGHT!! VANGUARD Divinez Deluxe-hen" width="56" height="80" class="lc-tt-poster row-span-3" data-schedule-anime-target="poster" srcset="https://u.livechart.me/anime/11776/poster_image/79c92e45bc8ef811ab2da573144a6fcc.webp/small.jpg 1x, https://u.livechart.me/anime/11776/poster_image/79c92e45bc8ef811ab2da573144a6fcc.webp/large.jpg 2x" loading="lazy" decoding="async" src="https://u.livechart.me/anime/11776/poster_image/79c92e45bc8ef811ab2da573144a6fcc.webp/small.jpg">
+            2. titolo: <a class="text-sm font-medium line-clamp-2 link-hover lc-tt-anime-title" data-schedule-anime-target="preferredTitle" title="CARDFIGHT!! VANGUARD Divinez Deluxe-hen" href="/anime/11776">CARDFIGHT!! VANGUARD Divinez Deluxe-hen</a>
+            3. episodio e dove in uscita: <a class="lc-tt-release-label text-xs text-base-content/75 truncate link-hover" href="/anime/11776/schedules/1581"><span class="font-medium">EP3</span> · TV (JP)</a>
+
+PER QUANTO RIGUARDA IL CALENDARIO VORREI UNA SEZIONE CON DATA DI OGGI CON DENTRO DEI RIQUADRI CON POSTER, TITOLO, EPISODIO IN USCITA E DOVE ESCE, E ORA DI USCITA.
+
+ANALIZZIAMO ADESSO https://www.animeworld.so/updated PER LA PAGINA ULTIMI EPISODI USCITI:
+
+1. <div class="film-list" bis_skin_checked="1">, questo è il contenitore che contiene tutti gli EPISODI (non anime ma i singoli episodi) USCITI DI RECENTE, l'intera lista.
+2. <div class="item" bis_skin_checked="1">, dentro il primo div, troviamo i singoli episodi di anime, ogni episodio di anime è un div con la classe item.
+3. <div class="inner" bis_skin_checked="1">, troviamo i metadata del singolo anime tra cui:
+    1. titolo anime E HREF PER PAGINA EPISODI: <a href="/play/i-may-be-a-guild-receptionist-but-ill-solo-any-boss-to-clock-out-on-time.18Slq/52Eq1z" data-jtitle="Guild no Uketsukejou desu ga, Zangyou wa Iya nanode Boss wo Solo Toubatsu Shiyou to Omoimasu" class="name">I May Be a Guild Receptionist, but I'll Solo Any Boss to Clock Out on Time</a>
+    2. API PER RICAVARE DESCRIZIONE, RATING, DATA DI USCITA: <a href="/play/i-may-be-a-guild-receptionist-but-ill-solo-any-boss-to-clock-out-on-time.18Slq/52Eq1z" class="poster tooltipstered" data-tip="api/tooltip/5502">
+    3. poster: <img loading="lazy" src="https://img.animeworld.so/locandine/18Slq.jpg" alt="I May Be a Guild Receptionist, but I'll Solo Any Boss to Clock Out on Time">
+    4. episodio uscito: <div class="status" bis_skin_checked="1">
+
+
+                                                        <span class="bar"></span>
+                                                        <div class="ep" bis_skin_checked="1"> Ep 3 </div>
+                                                    </div>
+
+TI RICORDO CHE l'id dell'anime, che serve per estrapolare
+     rating dell'anime, data di uscita, descrizione dell'anime, e stato attuale dell'anime, esempio link "https://www.animeworld.so/api/tooltip/<ID>" sostituendo ID con l'id dell'anime ci porta a una pagina con le informazioni che ci servono, 
+     che si trovano nei contenitori:
+        - DATA DI USCITA: <div class="meta" bis_skin_checked="1">
+        <label>Data di uscita:</label>
+        <span>
+            07 Aprile 2017
+        </span>
+     </div>
+        - STATO DELL'ANIME: <div class="meta" bis_skin_checked="1">
+        <label>Stato:</label>
+        <span>Finito</span>
+      </div>
+        - RATING DELL'ANIME:
+        <div class="meta" bis_skin_checked="1">
+        <label>Voto:</label>
+        <span>7.23</span>
+        </div>
+        - DESCRIZIONE ANIME: <p class="desc">Hinako è una ragazza poco sociale, che vive in una zona rurale del Giappone. Desidera sviluppare la sua capacità&nbsp; di comunicazione, in modo da poter parlare liberamente con gli altri. Per questo decide di trasferirsi a Tokyo e di iscriversi ad un clu...</p>
+
+        ANCHE QUESTE INFO VANNO ESTRAPOLATE
+
+
+FINE.
+
+PER ADESSO CREA LA PAGINA INIZIALE DEL SITO WEB, DEVE ESSERE MINIMAL STILE SWIFT/XCODE, COLORI NERO E BIANCO, PER LE SEZIONI ANIME DA MOBILE SI PUò SCROLLARE CON DITO E DA DESKTOP METTI DELLE FRECCIE A DESTRA E SINISTRA PER FARLO
