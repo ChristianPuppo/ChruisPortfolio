@@ -43,3 +43,27 @@ var friendlyWelcome = "Hello!"
 friendlyWelcome = "Bonjour!"
 // friendlyWelcome is now "Bonjour!"
 
+
+print(friendlyWelcome)
+// print è una funzione che stampa il valore della variabile, o costante
+
+
+print("The current value of friendlyWelcome is \(friendlyWelcome)")
+// Prints "The current value of friendlyWelcome is Bonjour!"
+
+// commenti si scrivono con //
+
+/*
+commenti multi-line
+*/
+
+let cat = "🐱"; print(cat) //non serve mettere ";" su swift, ma serve per scrivere più istruzioni su una stessa riga
+// Prints "🐱"
+
+let minValue = UInt8.min  // minValue is equal to 0, and is of type UInt8
+let maxValue = UInt8.max  // maxValue is equal to 255, and is of type UInt8
+//stamperà 0 e 255, integers sono numeri interi senza la virgola
+
+//Floating-point numbers are numbers with a decimal point, such as 3.14159, 0.1, and -273.15.
+//Double and Float are two types of floating-point numbers. 
+
