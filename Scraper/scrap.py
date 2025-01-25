@@ -20,6 +20,7 @@ HEADERS = {
 # Creiamo una sessione persistente
 session = requests.Session()
 session.headers.update(HEADERS)
+session.timeout = 30  # timeout di 30 secondi
 
 # Numero massimo di thread concorrenti
 MAX_WORKERS = 10
@@ -82,7 +83,7 @@ def get_anime_info(anime_id):
             s.headers.update(headers)
             
             # Prima richiesta per ottenere il cookie
-            response = s.get(url)
+            response = s.get(url, timeout=30)
             if response.status_code == 202:
                 # Estrai il cookie e l'URL di redirect dallo script
                 soup = BeautifulSoup(response.text, 'html.parser')
@@ -100,7 +101,7 @@ def get_anime_info(anime_id):
                         if redirect_match:
                             redirect_url = redirect_match.group(1)
                             # Seconda richiesta con il cookie impostato
-                            response = s.get(redirect_url)
+                            response = s.get(redirect_url, timeout=30)
             
             print(f"Status finale: {response.status_code}")
             print(f"Content finale: {response.text[:200]}")
